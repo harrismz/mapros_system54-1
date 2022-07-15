@@ -1376,6 +1376,16 @@ class Node implements
 		}*/
 		if ($this->getModelType() == 'board') {
 			$model = $model->where('code', $board_id);
+			$countModel = $model->distinct()->count();
+			$model->get();
+			throw new StoreResourceFailedException($this->confirmation_view_error, [
+				'message' => "MODELNAME BANYAK DI BIGS",
+				'node' => json_decode($this, true),
+				// 'prevBoard' => $prevBoard,
+				'server-modelname' => $model,
+			]);
+			
+
 		} else {
 			if (is_null($this->guid_ticket) && ($this->getModelType() == 'ticket')) {
 				throw new StoreResourceFailedException("guid ticket is null", [
