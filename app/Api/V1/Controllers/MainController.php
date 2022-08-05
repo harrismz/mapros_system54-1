@@ -171,12 +171,10 @@ class MainController extends Controller
 	}
 
 	private function runNode($parameter){
-
 		$node = new Node($parameter);
-		// return $node;
 
 		$this->returnValue['node'] = $node;
-
+		return $node;
 		if ($node->getModelType() == 'board') {
 			return $this->processBoard($node);
 		}

@@ -40199,22 +40199,41 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-	props: ['config_modelname', 'server_modelname'],
+	props: ['config_modelname', 'server_modelname', 'nonArray'],
 	components: {
 		modal: __WEBPACK_IMPORTED_MODULE_0__Modal_vue___default.a
 	},
+	mounted: function mounted() {
+		this.arrayCheck();
+	},
 	methods: {
+		arrayCheck: function arrayCheck() {
+			this.nonArray = this.nonArray;
+		},
 		configOnClick: function configOnClick() {
 			console.log('configOnClick');
 			this.$emit('toggleConfirm');
 			this.$emit('toggleModal', 'ERROR', 'you scan wrong parts!!');
 		},
 		serverOnClick: function serverOnClick() {
+			var modelname = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : null;
+
 			console.log('serverOnClick');
 			this.$emit('toggleConfirm');
+			if (modelname) this.$emit('changeConfig', modelname);
 			this.$emit('changeConfig', this.server_modelname);
 		}
 	}
@@ -40855,6 +40874,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 //
 //
 //
+//
 
 var axios = __webpack_require__(17);
 
@@ -40905,7 +40925,8 @@ var axios = __webpack_require__(17);
             },
 
             server: {
-                modelname: ''
+                modelname: [],
+                nonArray: false
             },
 
             error: '',
@@ -41547,8 +41568,17 @@ var axios = __webpack_require__(17);
             });
         },
         returnViewConfirmation: function returnViewConfirmation(error) {
-            this.server.modelname = error.errors['server-modelname'][0];
-            console.log('view-confirmation', error.errors['server-modelname'][0]);
+
+            if (error.errors['server-modelname'].length > 1) {
+                this.server.nonArray = false;
+                this.server.modelname = error.errors['server-modelname']; //[0]
+                console.log('view-confirmation', error.errors['server-modelname']); //[0] )
+            } else {
+                this.server.nonArray = true;
+                this.server.modelname = error.errors['server-modelname'][0];
+                console.log('view-confirmation', error.errors['server-modelname'][0]);
+            }
+
             this.showConfirm = !this.showConfirm;
         },
         showDetailError: function showDetailError() {
@@ -66268,6 +66298,10 @@ module.exports = Component.exports
 /* 241 */
 /***/ (function(module, exports, __webpack_require__) {
 
+
+/* styles */
+__webpack_require__(279)
+
 var Component = __webpack_require__(6)(
   /* script */
   __webpack_require__(106),
@@ -66949,7 +66983,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     scopedSlots: _vm._u([{
       key: "option",
       fn: function(option) {
-        return [_vm._v("\n                                          " + _vm._s(option.code) + " - " + _vm._s(option.category) + "\n                                      ")]
+        return [_vm._v("\n                                            " + _vm._s(option.code) + " - " + _vm._s(option.category) + "\n                                        ")]
       }
     }]),
     model: {
@@ -67024,23 +67058,23 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     staticClass: "row"
   }, [_c('div', {
     staticClass: "col-md-6 col-sm-6 col-xs-7"
-  }, [_vm._v("\n                                              LINE : "), _c('strong', [_vm._v(" " + _vm._s(_vm.info.line) + " ")])]), _vm._v(" "), _c('div', {
+  }, [_vm._v("\n                                                LINE : "), _c('strong', [_vm._v(" " + _vm._s(_vm.info.line) + " ")])]), _vm._v(" "), _c('div', {
     staticClass: "col-md-6 col-sm-6 col-xs-5 text-right pull-right float-right"
-  }, [_vm._v("\n                                                 TYPE : " + _vm._s(_vm.info.type) + "\n                                             ")])]), _vm._v(" "), _c('div', {
+  }, [_vm._v("\n                                                   TYPE : " + _vm._s(_vm.info.type) + "\n                                               ")])]), _vm._v(" "), _c('div', {
     staticClass: "row"
   }, [_c('div', {
     staticClass: "col-md-6 col-sm-6 col-xs-7"
-  }, [_vm._v("\n                                                  PROCESS: "), _c('strong', [_vm._v(" " + _vm._s(_vm.info.process) + " ")])]), _vm._v(" "), _c('div', {
+  }, [_vm._v("\n                                                    PROCESS: "), _c('strong', [_vm._v(" " + _vm._s(_vm.info.process) + " ")])]), _vm._v(" "), _c('div', {
     staticClass: "col-md-6 col-sm-6 col-xs-5 text-right pull-right float-right"
-  }, [_vm._v("\n                                                 STEP ID : " + _vm._s(_vm.info.lineprocess_id) + "\n                                             ")])]), _vm._v(" "), _c('div', {
+  }, [_vm._v("\n                                                   STEP ID : " + _vm._s(_vm.info.lineprocess_id) + "\n                                               ")])]), _vm._v(" "), _c('div', {
     staticClass: "row"
   }, [_c('div', {
     staticClass: "col-md-6 col-sm-6 col-xs-12"
-  }, [_vm._v("\n                                                  MODEL : "), _c('strong', [_vm._v(" " + _vm._s(_vm.form.modelname) + " ")])])]), _vm._v(" "), _c('hr', {
+  }, [_vm._v("\n                                                    MODEL : "), _c('strong', [_vm._v(" " + _vm._s(_vm.form.modelname) + " ")])])]), _vm._v(" "), _c('hr', {
     staticClass: "black"
   })]), _vm._v(" "), _c('div', {
     staticClass: "text-center"
-  }, [_vm._v("\n                                          Information Status: "), _c('br'), _vm._v(" "), _c('strong', [_vm._v(" " + _vm._s(_vm.error) + " ")]), _vm._v(" "), _c('H2', [_c('strong', [_vm._v(_vm._s((_vm.hasError) ? 'NG' : 'OK'))])]), _vm._v(" "), _c('a', {
+  }, [_vm._v("\n                                            Information Status: "), _c('br'), _vm._v(" "), _c('strong', [_vm._v(" " + _vm._s(_vm.error) + " ")]), _vm._v(" "), _c('H2', [_c('strong', [_vm._v(_vm._s((_vm.hasError) ? 'NG' : 'OK'))])]), _vm._v(" "), _c('a', {
     style: (_vm.styles),
     on: {
       "click": function($event) {
@@ -67059,7 +67093,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     attrs: {
       "type": "submit"
     }
-  }, [_vm._v("\n                                      Submit "), _c('i', {
+  }, [_vm._v("\n                                        Submit "), _c('i', {
     staticClass: "fa fa-check float-right"
   })]) : _vm._e(), _vm._v(" "), (_vm.config.isShowDeleteButton) ? _c('button', {
     staticClass: "btn btn-danger",
@@ -67072,7 +67106,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
         return _vm.deleteOnClick($event)
       }
     }
-  }, [_vm._v("\n                                      Delete "), _c('i', {
+  }, [_vm._v("\n                                        Delete "), _c('i', {
     staticClass: "fa fa-trash float-right"
   })]) : _vm._e(), _vm._v(" "), ((_vm.config.isSendAjax || _vm.config.isGenerateFile) && (_vm.includeIn || _vm.showResendBtn)) ? _c('button', {
     staticClass: "btn btn-warning",
@@ -67095,7 +67129,8 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
   }) : _vm._e(), _vm._v(" "), (_vm.showConfirm) ? _c('confirm', {
     attrs: {
       "config_modelname": _vm.form.modelname,
-      "server_modelname": _vm.server.modelname
+      "server_modelname": _vm.server.modelname,
+      "nonArray": _vm.server.nonArray
     },
     on: {
       "toggleModal": _vm.toggleModal,
@@ -68154,17 +68189,41 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       "slot": "footer"
     },
     slot: "footer"
+  }, [_c('div', {
+    staticClass: "card col-6"
   }, [_c('button', {
-    staticClass: "btn btn-danger",
+    staticClass: "btn btn-danger m-5",
+    attrs: {
+      "type": "button"
+    },
     on: {
       "click": _vm.configOnClick
     }
-  }, [_vm._v("\n\t\t\t" + _vm._s(_vm.config_modelname) + "\n\t\t")]), _vm._v(" "), _c('button', {
-    staticClass: "btn btn-success",
+  }, [_vm._v("\n\t\t\t\t" + _vm._s(_vm.config_modelname) + "\n\t\t\t")])]), _vm._v(" "), (_vm.nonArray) ? _c('div', {
+    staticClass: "card col-6"
+  }, [_c('button', {
+    staticClass: "btn btn-success m-5",
+    attrs: {
+      "type": "button"
+    },
     on: {
       "click": _vm.serverOnClick
     }
-  }, [_vm._v("\n\t\t\t" + _vm._s(_vm.server_modelname) + "\n\t\t")])])])
+  }, [_vm._v("\n\t\t\t\t" + _vm._s(_vm.server_modelname) + "\n\t\t\t")])]) : _vm._e(), _vm._v(" "), (!_vm.nonArray) ? _c('div', {
+    staticClass: "card col-6"
+  }, _vm._l((_vm.server_modelname), function(modelname) {
+    return _c('div', [_c('button', {
+      staticClass: "btn btn-success m-5",
+      attrs: {
+        "type": "button"
+      },
+      on: {
+        "click": function($event) {
+          _vm.serverOnClick(modelname)
+        }
+      }
+    }, [_vm._v("\n\t\t\t\t\t" + _vm._s(modelname) + "\n\t\t\t\t")])])
+  })) : _vm._e()])])
 },staticRenderFns: []}
 module.exports.render._withStripped = true
 if (false) {
@@ -72994,6 +73053,45 @@ module.exports = function(module) {
 __webpack_require__(83);
 module.exports = __webpack_require__(84);
 
+
+/***/ }),
+/* 272 */,
+/* 273 */,
+/* 274 */,
+/* 275 */,
+/* 276 */,
+/* 277 */,
+/* 278 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(11)();
+exports.push([module.i, "\n.m-5{\r\n\tmargin:5px;\n}\r\n", ""]);
+
+/***/ }),
+/* 279 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(278);
+if(typeof content === 'string') content = [[module.i, content, '']];
+if(content.locals) module.exports = content.locals;
+// add the styles to the DOM
+var update = __webpack_require__(22)("0e53e252", content, false);
+// Hot Module Replacement
+if(false) {
+ // When the styles change, update the <style> tags
+ if(!content.locals) {
+   module.hot.accept("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"id\":\"data-v-852ba496\",\"scoped\":false,\"hasInlineConfig\":true}!../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./Confirm.vue", function() {
+     var newContent = require("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"id\":\"data-v-852ba496\",\"scoped\":false,\"hasInlineConfig\":true}!../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./Confirm.vue");
+     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+     update(newContent);
+   });
+ }
+ // When the module is disposed, remove the <style> tags
+ module.hot.dispose(function() { update(); });
+}
 
 /***/ })
 /******/ ]);

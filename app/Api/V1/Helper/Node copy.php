@@ -28,6 +28,7 @@ use GuzzleHttp\Client;
 use Guzzle\Http\Exception\BadResponseException;
 use App\Endpoint;
 use App\Symptom;
+use App\Http\Controllers\Controller;
 use App\Api\V1\Interfaces\ColumnSettingInterface;
 use App\Api\V1\Interfaces\CriticalPartInterface;
 use App\Api\V1\Interfaces\RepairableInterface;
@@ -1328,6 +1329,10 @@ class Node implements
 	*/
 	public function getBoardType($board_id = null)
 	{
+		throw new StoreResourceFailedException("model is not found", [
+			'node' => json_decode($this, true),
+		]);
+		
 		// it's can be triggered if model & guid has been set;
 		if (is_null($this->model)) {
 			throw new StoreResourceFailedException("model is not found", [
@@ -1350,7 +1355,7 @@ class Node implements
 			'code',
 			'side',
 		]);
-		
+
 		/*if($this->getModelType() == 'ticket'){
 			if (is_null($this->guid_ticket)) {
 				throw new StoreResourceFailedException("guid ticket is null", [
@@ -1375,14 +1380,27 @@ class Node implements
 			$model = $model->where('code', $board_id );
 		}*/
 		if ($this->getModelType() == 'board') {
+			$assy_model = setting('admin.assy_model');
 			$model = $model->where('code', $board_id);
+			
+			// $model = $this->getWhereNotLikeIn($model,$assy_model,'name');
+			
+			// foreach ($model as $value) {
+			// 	$model_select[] =$value;
+			// }
+
 			// $countModel = $model->distinct()->count();
-			// $model->get();
+
+			// $model = $model->select('name','pwbname','pwbno','cavity','code');
+			// $model = $model->pluck('name')->toArray();
+
 			throw new StoreResourceFailedException($this->confirmation_view_error, [
 				'message' => "MODELNAME BANYAK DI BIGS",
 				'node' => json_decode($this, true),
 				// 'prevBoard' => $prevBoard,
-				'server-modelname' => $model,
+				'server-modelname' => Controller::getEloquentSqlWithBindings($model)
+				// 'server-modelname' => $model
+				// 'server-modelname' => $model
 			]);
 			
 
@@ -2369,5 +2387,20 @@ class Node implements
 		}
 
 		return true;
+	}
+
+	public function getWhereNotLikeIn($query,$array_param,$column)
+	{
+		return $query;
+		if(is_array($array_param))
+		{
+			foreach ($array_param as $value) {
+				$query = $query->where($column,'not like',$value);
+			}
+			return $query;
+		}
+		return $query;
+		// return $query = $query->where($column,'not like',$array_param);
+
 	}
 }

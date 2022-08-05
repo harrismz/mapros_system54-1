@@ -251,6 +251,7 @@
         @changeConfig='changeConfig'
         v-bind:config_modelname='form.modelname'
         v-bind:server_modelname='server.modelname'
+				v-bind:nonArray='server.nonArray'
     ></confirm>
     <join v-if='showJoin' 
         :form='form'
@@ -311,7 +312,8 @@
                 },
 
                 server:{
-                    modelname:''
+                    modelname:[],
+										nonArray:false
                 },
 
                 error: '',
@@ -967,8 +969,18 @@
             },
 
             returnViewConfirmation(error){
-                this.server.modelname = error.errors['server-modelname'][0]
-                console.log('view-confirmation', error.errors['server-modelname'][0] )
+
+								if((error.errors['server-modelname']).length > 1){
+									this.server.nonArray = false;
+									this.server.modelname = error.errors['server-modelname']//[0]
+									console.log('view-confirmation', error.errors['server-modelname'])//[0] )
+								}
+								else{
+									this.server.nonArray = true;
+									this.server.modelname = error.errors['server-modelname'][0]
+									console.log('view-confirmation', error.errors['server-modelname'][0])
+								}
+
                 this.showConfirm = !this.showConfirm;
             },
 
