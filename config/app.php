@@ -184,7 +184,6 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
         Firebird\FirebirdServiceProvider::class, //firebird driver
-				Clockwork\Support\Laravel\ClockworkServiceProvider::class, // clockwork from itsgoingd/clockwork driver for N+1 Problem Solving
 
     ],
 
@@ -239,7 +238,6 @@ return [
          * Package Facades...
          */
         'JWTAuth' => Tymon\JWTAuth\Facades\JWTAuth::class,
-				'Clockwork' => Clockwork\Support\Laravel\Facade::class, // clockwork from itsgoingd/clockwork driver for N+1 Problem Solving
     ],
 
 ];

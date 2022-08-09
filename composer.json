@@ -24,8 +24,7 @@
         "guzzlehttp/guzzle": "^6.3",
         "symfony/psr-http-message-bridge": "^1.0",
         "jacquestvanzuydam/laravel-firebird": "dev-5.4-support",
-        "phpoffice/phpspreadsheet": "^1.8",
-        "itsgoingd/clockwork": "^5.1"
+        "phpoffice/phpspreadsheet": "^1.8"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",
@@ -66,14 +65,7 @@
         ]
     },
     "config": {
-        "preferred-install": "dist",
-				"platform": {
-					"php": "7.1.0"
-				},
-				"platform-check": false,
-        "allow-plugins": {
-            "kylekatarnls/update-helper": false
-        }
+        "preferred-install": "dist"
     },
     "repositories": {
         "hooks": {
