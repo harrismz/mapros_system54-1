@@ -21,7 +21,7 @@
 						{{config_modelname }}
 					</button>
 					<div v-for="(modelname, key) in server_modelname">
-						<button class="list-group-item list-group-item-success" @click='serverOnClick(key)' >
+						<button class="list-group-item list-group-item-success pt-2" @click='serverOnClick(key)' >
 							{{ modelname }}
 						</button>
 					</div>	
@@ -66,7 +66,7 @@
 </script>
 
 <style>
-.mt-2{
-	margin-top:2em;
+.pt-2{
+	margin-top:1em !important;
 }
 </style>
