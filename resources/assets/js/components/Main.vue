@@ -251,6 +251,7 @@
         @changeConfig='changeConfig'
         v-bind:config_modelname='form.modelname'
         v-bind:server_modelname='server.modelname'
+        v-bind:singleModel='server.singleModel'
     ></confirm>
     <join v-if='showJoin' 
         :form='form'
@@ -311,7 +312,8 @@
                 },
 
                 server:{
-                    modelname:''
+                    modelname:[],
+										singleModel : true,
                 },
 
                 error: '',
@@ -967,8 +969,24 @@
             },
 
             returnViewConfirmation(error){
-                this.server.modelname = error.errors['server-modelname'][0]
-                console.log('view-confirmation', error.errors['server-modelname'][0] )
+								let countModel = error.errors['server-modelname'].length
+								console.log(countModel);
+								if(countModel > 1){
+									console.log('view-confirmation', countModel )
+									this.server.modelname = error.errors['server-modelname']
+									this.server.singleModel = error.errors['server-singlemodel'][0]
+									console.log('view-confirmation', error.errors['server-modelname'] )
+									console.log('view-confirmation-singlemodelcheck', error.errors['server-singlemodel'][0] )
+								}
+								else{
+									console.log('view-confirmation', countModel )
+									this.server.modelname = error.errors['server-modelname'][0]
+									this.server.singleModel = true
+									console.log('view-confirmation', error.errors['server-modelname'][0] )
+								}
+								
+								
+
                 this.showConfirm = !this.showConfirm;
             },
 

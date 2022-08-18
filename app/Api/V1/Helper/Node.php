@@ -28,6 +28,7 @@ use GuzzleHttp\Client;
 use Guzzle\Http\Exception\BadResponseException;
 use App\Endpoint;
 use App\Symptom;
+use App\Http\Controllers\Controller;
 use App\Api\V1\Interfaces\ColumnSettingInterface;
 use App\Api\V1\Interfaces\CriticalPartInterface;
 use App\Api\V1\Interfaces\RepairableInterface;
@@ -1387,8 +1388,47 @@ class Node implements
 			$model = $model->where('name', $this->parameter['modelname']);
 		}
 
-		$model = $model->first();
+		if(setting('admin.assy_model') != null){
+			$assy_model = setting('admin.assy_model');
+			$assy_model = explode(",",$assy_model);
+			$model = $model->whereNotIn('name',$assy_model);
+		}
 
+		// get data model without duplicate model name
+		$getIdModelMin = Mastermodel::select(DB::raw('min(id) as id'))
+										->where('code',$board_id)
+										->groupBy('name')
+										->get();
+		$model = $model->whereIn('id',$getIdModelMin);
+
+		$cek_model = $model->get();
+
+		if(count($cek_model) > 1){
+			$getModel = [];
+			foreach ($cek_model as $value) {
+					$getModel[] = $value['name'];
+					if($this->parameter['modelname'] == $value['name']){
+						$this->selectModel($value);
+						return $this;
+					}
+			}
+
+			throw new StoreResourceFailedException($this->confirmation_view_error, [
+				'node' => json_decode($this, true),
+				'server-modelname' => $getModel,
+				'server-singlemodel' => false
+			]);
+		}
+		// return $model;
+		// throw new StoreResourceFailedException("ANDA SCAN '{$board_id}'. PENGATURAN DATA DENGAN NAMA MODEL '{$this->parameter['modelname']}' TIDAK DITEMUKAN DI BOARD ID GENERATOR SYSTEM! PASTIKAN CURRENT MODEL CONFIG BENAR!", [
+		// 	'node' => json_decode($this, true),
+		// 	'model_type' => $this->getModelType(),
+		// 	'scanned_value' => $board_id,
+		// 	'result query' => $model 
+		// ]);
+		
+		$model = $model->first();
+		
 		if ($model == null) {
 			throw new StoreResourceFailedException("ANDA SCAN '{$board_id}'. PENGATURAN DATA DENGAN NAMA MODEL '{$this->parameter['modelname']}' TIDAK DITEMUKAN DI BOARD ID GENERATOR SYSTEM! PASTIKAN CURRENT MODEL CONFIG BENAR!", [
 				'node' => json_decode($this, true),
@@ -1397,9 +1437,15 @@ class Node implements
 			]);
 		}
 
-		$this->setBoard($model);
-		$this->setModelname($model->name);
+		$this->selectModel($model);
+		return $this;
+		
+	}
 
+	public function selectModel($model){
+		$this->setBoard($model);
+		$this->setModelname($model);
+		// $this->setModelname($model->name);
 		return $this;
 	}
 

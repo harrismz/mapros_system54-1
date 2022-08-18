@@ -46,7 +46,7 @@ use App\Api\V1\Traits\ManualInstructionTrait;
 use App\Api\V1\Interfaces\CartonInterface;
 use App\Api\V1\Traits\CartonTrait;
 
-class Node implements
+class NodeCopy implements
 	ColumnSettingInterface,
 	CriticalPartInterface,
 	RepairableInterface,

@@ -7,12 +7,32 @@
 			<p> SILAHKAN PILIH MODEL YANG SAAT INI RUNNING  </p>
 		</div>
 		<div slot='footer'>
-			<button class="btn btn-danger" @click='configOnClick' >
+			<div v-if="singleModel">
+				<button class="btn btn-danger pull-left" @click='configOnClick' >
 				{{config_modelname }}
 			</button>
-			<button class="btn btn-success" @click='serverOnClick' >
+			<button class="btn btn-success pull-right" @click='serverOnClick' >
 				{{ server_modelname }}
 			</button>
+			</div>
+
+			<div class="list-group" v-if="!singleModel">
+				<button class="list-group-item list-group-item-danger" @click='configOnClick' >
+						{{config_modelname }}
+					</button>
+					<div v-for="(modelname, key) in server_modelname">
+						<button class="list-group-item list-group-item-success" @click='serverOnClick(key)' >
+							{{ modelname }}
+						</button>
+					</div>	
+			</div>
+
+			<!-- <button class="btn btn-success pull-right" @click='serverOnClick' >
+				{{ server_modelname }}
+			</button>
+			<button class="btn btn-success pull-right" @click='serverOnClick' >
+				{{ server_modelname }}
+			</button> -->
 
 		</div>
 	</modal>
@@ -21,7 +41,12 @@
 <script>
 	import modal from './Modal.vue';
 	export default {
-		props :['config_modelname', 'server_modelname' ],
+		props :['config_modelname', 'server_modelname', 'singleModel' ],
+		// data: () => {
+		// 	return{
+		// 		singleModel : false
+		// 	}
+		// },
 		components: {
 			modal
 		},
@@ -31,11 +56,17 @@
 				this.$emit('toggleConfirm');
 				this.$emit('toggleModal', 'ERROR', 'you scan wrong parts!!');
 			},
-			serverOnClick(){
-				console.log('serverOnClick');
+			serverOnClick(key=null){
+				console.log('serverOnClick',this.server_modelname[key]);
 				this.$emit('toggleConfirm');
-				this.$emit('changeConfig', this.server_modelname );
+				this.$emit('changeConfig', this.server_modelname[key] );
 			}
 		}
 	}
 </script>
+
+<style>
+.mt-2{
+	margin-top:2em;
+}
+</style>
