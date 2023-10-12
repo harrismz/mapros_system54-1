@@ -150,6 +150,13 @@
 
                             <div class="form-group">
                                 <div class=" col-md-6 col-md-offset-3 col-xs-12">
+                                    <toggle-button v-model="config.isLDPE" :sync='true' :color="'#2ab27b'" :labels="true"/>
+                                    <label for="isLDPE"> Scan Label PET & LDPE </label>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <div class=" col-md-6 col-md-offset-3 col-xs-12">
                                     <toggle-button v-model="config.isManualInstruction" :sync='true' :color="'#2ab27b'" :labels="true"/>
                                     <label for="isManualInstruction"> Scan Manual Instruction </label>
                                 </div>

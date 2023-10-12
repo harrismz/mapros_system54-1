@@ -61,6 +61,21 @@
                                 </div>
                             </div>
 
+                            <div class="form-group" v-if="config.isLDPE" >
+                                <label class="col-md-4 control-label">{{ label.pet }}</label>
+
+                                <div class="col-md-6">
+                                    <input  id="pet" :placeholder="label.pet" ref='pet' v-model="form.pet" type="pet" class="form-control" name="pet"  required @keyup='petLdpeOnKeyup' @keyup.13.prevent='boardOnFocus'>
+                                </div>
+                            </div>
+                            <div class="form-group" v-if="config.isLDPE" >
+                                <label class="col-md-4 control-label">{{ label.ldpe }}</label>
+
+                                <div class="col-md-6">
+                                    <input  id="ldpe" :placeholder="label.ldpe" ref='ldpe' v-model="form.ldpe" type="ldpe" class="form-control" name="ldpe"  required @keyup='petLdpeOnKeyup' @keyup.13.prevent='boardOnFocus'>
+                                </div>
+                            </div>
+
                             <div class="form-group" v-if='config.isManualInstruction'>
                                 <label class="col-md-offset-4 col-md-6"> Show Instruction QR textfield : <toggle-button v-model="showManualInstruction" :color="'#2ab27b'" :labels="true" /></label>
                             </div>
@@ -118,6 +133,8 @@
                                     <input  id="pwbId" :placeholder="label.pwbId" ref='pwbId' v-model="form.pwbId" type="pwbId" class="form-control" name="pwbId"  required>
                                 </div>
                             </div>
+                            
+
                             <div class="form-group" v-if="config.isQrPanel" >
                                 <label class="col-md-4 control-label">{{ label.qrPanel }}</label>
 
@@ -316,7 +333,9 @@
                     fifoMode: false, //ini refer ke config;
                     pwbId: '', // ini tambahan scan panel4 untuk model DT
                     qrPanel: '', // ini tambahan scan inspect7 untuk model DT
-                    sirius: '' // ini tambahan scan inspect7 untuk model DT
+                    sirius: '', // ini tambahan scan inspect7 untuk model DT
+                    pet: '', // ini tambahan scan inspect7 untuk model DT
+                    ldpe: '' // ini tambahan scan inspect7 untuk model DT
                 },
 
                 isNG : false,
@@ -366,9 +385,11 @@
                 label : {
                     id : 'Board ID',
                     serialAutolinezero : 'Serial Set',
-                    qrPanel : 'QR Panel',
-                    sirius : 'Sirius Code ( SXM )',
-                    pwbId : 'PWB ID'
+                    qrPanel : 'QR Panel', // ini tambahan scan inspect7 untuk model DT
+                    sirius : 'Sirius Code ( SXM )', // ini tambahan scan inspect7 untuk model DT
+                    pwbId : 'PWB ID',
+                    pet : 'PET Label', // ini tambahan scan packing1 untuk model DT
+                    ldpe : 'LDPE Label', // ini tambahan scan packing1 untuk model DT
                 },
 
                 jumlahJoin: 0, //current jumlah join
@@ -397,6 +418,7 @@
                     checkEsd:'',
                     isRework : false, // i'll be overriden by config
                     isManualInstruction : false,
+                    isLDPE : false,
                     isScanCarton:false, //default value
                 },
 
@@ -647,6 +669,44 @@
                 }
             },
 
+            petLdpeOnKeyup(e){
+                if(this.config.isLDPE ){
+                //    this.checkLdpe(this)
+                }
+            },
+            checkLdpe : _.debounce(( self ) => {
+                // const url = self.config.esdUri;
+                // const ldpe = self.form.ldpe;
+                // const pet = self.form.pet;
+
+                // if(pet.length > 0){
+                //     self.form.ldpe = '';
+                //     self.form.pet = '';
+                //     // self.$refs.pet.focus();
+
+                //     self.toggleModal('WARNING', 'PET ERROR' );
+                // }
+
+
+            //   axios.get(url, {
+            //     params : {
+            //         nik : nik
+            //     }
+            //   })
+            //   .then((res) => {
+            //     console.log('success', res)  
+            //   }).catch((error) => {
+            //     let data = error.response.data;
+            //     console.log(data)
+            //     // self.clearForm();
+            //     self.form.nik = '';
+
+            //     self.toggleModal('WARNING', data.message );
+
+            //   });
+
+            }, 350),
+
             getLocationData(){
                 let location =  this.$refs.location;
                 if (location) {
@@ -848,6 +908,15 @@
                     sirius.focus();
                 }
 
+                if(this.config.isLDPE && this.form.pet == '' ){
+                    let pet = document.getElementById('pet');
+                    pet.focus();
+                }
+                if(this.config.isLDPE && this.form.ldpe == '' ){
+                    let ldpe = document.getElementById('ldpe');
+                    ldpe.focus();
+                }
+
                 if(this.form.board_id == ''){
                     // let boardInput = document.getElementById('board_id');
                     let boardInput = this.$refs.board_id; //changes to using ref
@@ -952,6 +1021,11 @@
                 if(this.config.isSirius ) {
                     // kalau IN jangan dulu dihapus;
                     if(!this.responseData.message.includes('IN')) this.form.sirius = '';
+                }
+                if(this.config.isLDPE ) {
+                    // kalau IN jangan dulu dihapus;
+                    if(!this.responseData.message.includes('IN')) this.form.pet = '';
+                    if(!this.responseData.message.includes('IN')) this.form.ldpe = '';
                 }
                 /*kalau config showNgOption itu false, baru jalankan*/
                 if (!this.config.showNgoption) { this.isNG = false; }
