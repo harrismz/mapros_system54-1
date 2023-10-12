@@ -945,6 +945,10 @@
                     // kalau IN jangan dulu dihapus;
                     if(!this.responseData.message.includes('IN')) this.serialAutolinezero = '';
                 }
+                if(this.config.isPwbId ) {
+                    // kalau IN jangan dulu dihapus;
+                    if(!this.responseData.message.includes('IN')) this.form.pwbId = '';
+                }
                 if(this.config.isQrPanel ) {
                     // kalau IN jangan dulu dihapus;
                     if(!this.responseData.message.includes('IN')) this.form.qrPanel = '';
