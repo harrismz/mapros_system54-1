@@ -994,11 +994,11 @@
 
                 var enter = this.config.delimiter; //'';//'\r\n';
                 this.downloadContent = data;
-                if(this.serialAutolinezero != ''){
+                if(this.serialAutolinezero != 'NA'){
                     this.downloadContent += enter + this.serialAutolinezero;
                 }
-                if(this.form.PwbId != 'NA'){
-                    this.downloadContent += enter + this.form.PwbId;
+                if(this.form.pwbId != 'NA'){
+                    this.downloadContent += enter + this.form.pwbId;
                 }
                 if(this.form.qrPanel != 'NA'){
                     this.downloadContent += enter + this.form.qrPanel;
@@ -1006,6 +1006,15 @@
                 if(this.form.sirius != 'NA'){
                     this.downloadContent += enter + this.form.sirius;
                 }
+                // console.log("generate => ",{
+                //     'serialAutolinezero' : this.serialAutolinezero,
+                //     'form.pwbId' : this.form.pwbId,
+                //     'form.qrPanel' : this.form.qrPanel,
+                //     'form.sirius' : this.form.sirius,
+                //     'enter' : this.config.delimiter,
+                //     'downloadContent' : this.downloadContent,
+                // })
+                // return
                 //  + enter + this.form.qrPanel + enter + this.form.sirius ;
 
                 let filename = this.config.generatedFileName;
