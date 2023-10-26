@@ -61,6 +61,28 @@
                                 </div>
                             </div>
 
+                            <!-- <div class="form-group" v-if='config.isLdpePet'>
+                                <label class="col-md-offset-4 col-md-6"> Show LDPE/PET Scanning : <toggle-button v-model="showLdpePet" :color="'#2ab27b'" :labels="true" /></label>
+                            </div> -->
+
+                            <!-- <div class="row" v-if="(config.isLdpePet && !includeIn) || showLdpePet" > -->
+                            <!-- <div class="row" v-if="config.isLdpePet" > -->
+                                <div class="form-group" v-if="config.isLdpePet">
+                                    <label class="col-md-4 control-label">{{ label.pet }}</label>
+
+                                    <div class="col-md-6">
+                                        <input  id="pet" :placeholder="label.pet" ref='pet' v-model="form.pet" type="pet" class="form-control" name="pet"  @keyup='petOnKeyup' @keyup.13.prevent='boardOnFocus' required>
+                                    </div>
+                                </div>
+                                <div class="form-group" v-if="config.isLdpePet">
+                                    <label class="col-md-4 control-label">{{ label.ldpe }}</label>
+
+                                    <div class="col-md-6">
+                                        <input  id="ldpe" :placeholder="label.ldpe" ref='ldpe' v-model="form.ldpe" type="ldpe" class="form-control" name="ldpe"  @keyup='ldpeOnKeyup' @keyup.13.prevent='boardOnFocus' required>
+                                    </div>
+                                </div>
+                            <!-- </div> -->
+
                             <div class="form-group" v-if='config.isManualInstruction'>
                                 <label class="col-md-offset-4 col-md-6"> Show Instruction QR textfield : <toggle-button v-model="showManualInstruction" :color="'#2ab27b'" :labels="true" /></label>
                             </div>
@@ -316,13 +338,17 @@
                     fifoMode: false, //ini refer ke config;
                     pwbId: '', // ini tambahan scan panel4 untuk model DT
                     qrPanel: '', // ini tambahan scan inspect7 untuk model DT
-                    sirius: '' // ini tambahan scan inspect7 untuk model DT
+                    sirius: '', // ini tambahan scan inspect7 untuk model DT
+                    pet: '', // ini tambahan scan inspect7 untuk model DT
+                    ldpe: '' // ini tambahan scan inspect7 untuk model DT
                 },
 
                 isNG : false,
                 options : [], 
                 isJoin : false,
                 showManualInstruction: false,
+                showLdpePet: false,
+                ldpePetStatus: false,
                 manualInstructionQty:1, //ini nanti diubah based on modelname
 
                 showCarton:false,
@@ -368,7 +394,9 @@
                     serialAutolinezero : 'Serial Set',
                     qrPanel : 'QR Panel',
                     sirius : 'Sirius Code ( SXM )',
-                    pwbId : 'PWB ID'
+                    pwbId : 'PWB ID',
+                    pet : 'Label PET',
+                    ldpe : 'Label LDPE'
                 },
 
                 jumlahJoin: 0, //current jumlah join
@@ -557,6 +585,17 @@
 
         methods : {
             onSubmit(){
+                // if(this.config.isLdpePet || this.showLdpePet){
+                //     this.checkLdpe();
+                //     this.checkPet();
+                //     console.log("ldpepet => ",this.ldpePetStatus)
+                if(this.config.isLdpePet && this.ldpePetStatus == false)
+                    {
+                        this.boardOnFocus();
+                        return;
+                    }
+                // }
+
                 let data = this.form;
                 // console.log('pertama', {data });
                 if( this.toggleMode() == 'break' ){
@@ -646,6 +685,16 @@
                    this.checkEsd(this)
                 }
             },
+            petOnKeyup(e){
+                if(this.config.isLdpePet && ( this.form.pet.length >= 2 ) ){
+                   this.checkPet(this)
+                }
+            },
+            ldpeOnKeyup(e){
+                if(this.config.isLdpePet && ( this.form.ldpe.length >= 3 ) ){
+                   this.checkLdpe(this)
+                }
+            },
 
             getLocationData(){
                 let location =  this.$refs.location;
@@ -666,6 +715,54 @@
                 this.form.locations = [];
             },
 
+            
+            checkPet : _.debounce(( self ) => {
+                self.ldpePetStatus = false;
+                let pet = self.form.pet;
+                pet = pet.toUpperCase();
+                // console.log('PET SCAN  => ', pet)
+                // console.log('PET indexof  => ', pet.indexOf('PET'))
+                if(pet.indexOf('PET') === -1)
+                {
+                    // self.toggleModal('ERROR', 'Anda scan label '+pet+', bukan label PET !' );
+                    self.handleError("Anda scan label "+pet+", bukan label PET !");
+                    self.form.pet = '';
+                    document.getElementById('pet').focus();
+                    self.ldpePetStatus = false;
+                    return;
+                }
+                self.ldpePetStatus = true;
+            }, 350),
+
+            checkLdpe : _.debounce(( self ) => {
+                self.ldpePetStatus = false; 
+                const pet = self.form.pet;
+                const ldpe = self.form.ldpe;
+
+                if(pet == '')
+                {
+                    self.form.pet = '';
+                    self.form.ldpe = '';
+                    document.getElementById('pet').focus();
+                    // self.toggleModal('ERROR', 'Scan Label PET dulu !' );
+                    self.handleError("Scan PET Label dulu !","anda scan "+ ldpe);
+                    self.ldpePetStatus = false;
+                    return;
+                }
+
+                if(ldpe.indexOf('LDPE') === -1)
+                {
+                    self.form.ldpe = '';
+                    document.getElementById('ldpe').focus();
+                    
+                    self.handleError("Anda scan label "+ldpe+", bukan label LDPE !","anda scan "+ ldpe);
+                    // self.toggleModal('ERROR', 'Anda scan label '+ldpe+', bukan label LDPE !'  );
+                    self.ldpePetStatus = false;
+                    return;
+                }
+                self.ldpePetStatus = true;
+            }, 350),
+
             checkEsd : _.debounce(( self ) => {
               const url = self.config.esdUri;
               const nik = self.form.nik;
@@ -682,7 +779,6 @@
                 console.log(data)
                 // self.clearForm();
                 self.form.nik = '';
-
                 self.toggleModal('WARNING', data.message );
 
               });
@@ -847,6 +943,14 @@
                     let sirius = document.getElementById('sirius');
                     sirius.focus();
                 }
+                if(this.config.isLdpePet && this.form.pet == '' && this.form.ldpe == '' ){
+                    let pet = document.getElementById('pet');
+                    pet.focus();
+                }
+                if(this.config.isLdpePet && this.form.pet != '' && this.form.ldpe == '' ){
+                    let ldpe = document.getElementById('ldpe');
+                    ldpe.focus();
+                }
 
                 if(this.form.board_id == ''){
                     // let boardInput = document.getElementById('board_id');
@@ -871,8 +975,11 @@
                 this.hasError = true;
                 this.changesColor('red');
                 this.playNG(); //play sound NG
-                this.form.board_id='';
-                this.clearForm(); //clear form;
+                if(!this.config.isLdpePet)
+                {
+                    this.form.board_id='';
+                    this.clearForm(); //clear form;
+                }
                 if(this.config.isScanSN) {
                     this.form.serial_number = ''; //kita harus pikirkan apakah kita hapus ini atau engga.
                     this.showSerialNumberField = true;
@@ -957,6 +1064,15 @@
                     // kalau IN jangan dulu dihapus;
                     if(!this.responseData.message.includes('IN')) this.form.sirius = '';
                 }
+                if(this.config.isLdpePet ) {
+                    // kalau IN jangan dulu dihapus;
+                    if(!this.responseData.message.includes('IN')) 
+                    {
+                        this.form.pet = '';
+                        this.form.ldpe = '';
+                    }
+                }
+                
                 /*kalau config showNgOption itu false, baru jalankan*/
                 if (!this.config.showNgoption) { this.isNG = false; }
                 if(this.config.isManualInstruction){this.form.manual_content = [] }

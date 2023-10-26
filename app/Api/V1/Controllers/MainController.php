@@ -39,7 +39,9 @@ class MainController extends Controller
 		'serial_number', //optional and cannot be null
 		'fifoMode', // true or false;
 		'qrPanel', // add from isQrPanel for Inspect 7
-		'sirius' // add from isSirius for Inspect 7
+		'sirius', // add from isSirius for Inspect 7
+		'pet', // add from isLdpePet for packing 1
+		'ldpe' // add from isLdpePet for packing 1
 	];
 
 	protected $judge; // OK/NG only except from SOLDER;

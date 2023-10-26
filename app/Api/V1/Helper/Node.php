@@ -36,6 +36,7 @@ use App\Api\V1\Interfaces\ManualInstructionInterface;
 use App\Api\V1\Interfaces\CheckBoardDupplicationInterface;
 use App\Api\V1\Interfaces\QrPanelInterface;
 use App\Api\V1\Interfaces\CartonInterface;
+use App\Api\V1\Interfaces\AdditionalLabelInterface;
 use App\Api\V1\Traits\ColumnSettingTrait;
 use App\Api\V1\Traits\CriticalPartTrait;
 use App\Api\V1\Traits\RepairableTrait;
@@ -44,7 +45,7 @@ use App\Api\V1\Traits\ManualInstructionTrait;
 use App\Api\V1\Traits\CheckBoardDupplicationTrait;
 use App\Api\V1\Traits\QrPanelTrait;
 use App\Api\V1\Traits\CartonTrait;
-use App\Api\V1\Traits\SiriusTrait;
+use App\Api\V1\Traits\AdditionalLabelTrait;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 
@@ -55,7 +56,8 @@ class Node implements
 	LocationInterface,
 	ManualInstructionInterface,
 	QrPanelInterface,
-	CartonInterface
+	CartonInterface,
+	AdditionalLabelInterface
 {
 	use ColumnSettingTrait,
 		CriticalPartTrait,
@@ -64,7 +66,8 @@ class Node implements
 		CheckBoardDupplicationTrait,
 		ManualInstructionTrait,
 		QrPanelTrait,
-		CartonTrait;
+		CartonTrait,
+		AdditionalLabelTrait;
 
 	protected $model; // App\Board, App\Master , App\Ticket, or App\Part;
 	protected $model_code; // 5 char atau 11 char awal
@@ -1277,10 +1280,26 @@ class Node implements
 				$this->storeManualContent($this->parameter['manual_content']);
 			}
 		}
+		if (isset($this->parameter['pet'])) {
+			if (method_exists($this, 'storeAdditionalLabel')) {
+				if ($this->getStatus() == 'IN') {
+					$this->storeAdditionalLabel($this->parameter['pet']);
+				}
+			}
+		}
+		if (isset($this->parameter['ldpe'])) {
+			if (method_exists($this, 'storeAdditionalLabel')) {
+				if ($this->getStatus() == 'IN') {
+					$this->storeAdditionalLabel($this->parameter['ldpe']);
+				}
+			}
+		}
 		
 		if(isset($this->parameter['qrPanel'])){
 			if (method_exists($this, 'storeQrPanel')) {
-				$this->storeQrPanel($this->parameter['qrPanel']);
+				if ($this->getStatus() == 'IN') {
+					$this->storeQrPanel($this->parameter['qrPanel']);
+				}
 			}
 		}
 
