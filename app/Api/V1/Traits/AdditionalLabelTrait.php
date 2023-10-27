@@ -12,8 +12,13 @@ trait AdditionalLabelTrait {
         $guidMaster = ($guid == null )? $this->getGuidMaster() : $guid;
         $guidTicket = ($guid == null )? $this->getGuidTicket() : $guid;
         $content  = $data;
+        // [
+        //     "guidMaster" => $guidMaster,
+        //     "guidTicket" => $guidTicket,
+        //     "content" => $content
+        // ];
 
-        if($content == null || $guidMaster == null || $guidTicket == null) {
+        if($content == null || $guidMaster == null) {
             return null; // ??
         }
         if(isset($content)){

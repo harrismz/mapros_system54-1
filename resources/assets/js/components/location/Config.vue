@@ -1,5 +1,5 @@
 <template>
-	<div>
+	<div class="withBorder">
 		<div class="form-group">
             <label for="modelname" class="col-md-3 control-label">Model Name</label>
             <div class="col-md-9">

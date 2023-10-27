@@ -84,7 +84,10 @@
                             <!-- </div> -->
 
                             <div class="form-group" v-if='config.isManualInstruction'>
-                                <label class="col-md-offset-4 col-md-6"> Show Instruction QR textfield : <toggle-button v-model="showManualInstruction" :color="'#2ab27b'" :labels="true" /></label>
+                            <div class="col-md-offset-4 col-md-6 form-inline">
+                                <toggle-button v-model="showManualInstruction" :color="'#2ab27b'" :labels="true" />
+                                <label class="checkbox"> Show Instruction QR textfield</label>
+                            </div>
                             </div>
 
                             <div v-if="(config.isManualInstruction && includeIn) || showManualInstruction " >
@@ -109,7 +112,10 @@
                             </div>
 
                             <div class="form-group" v-if='config.isScanCarton'>
-                                <label class="col-md-offset-4 col-md-6"> Show Carton textfield : <toggle-button v-model="showCarton" :color="'#2ab27b'" :labels="true" /></label>
+                                <div class="col-md-offset-4 col-md-6">
+                                    <toggle-button v-model="showCarton" :color="'#2ab27b'" :labels="true" />
+                                    <label for="checkbox"> Show Carton textfield</label>
+                                </div>
                             </div>
 
                             <div class="form-group" v-if="(config.isScanCarton && includeIn) || showCarton " >

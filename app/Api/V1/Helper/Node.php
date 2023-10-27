@@ -19,6 +19,8 @@ use App\Lineprocess;
 use App\ColumnSetting;
 use App\InspectionLog;
 use App\lineprocessInspect;
+use App\qrPanel;
+use App\AdditionalLabel;
 use Illuminate\Database\QueryException;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Dingo\Api\Exception\StoreResourceFailedException;
@@ -116,6 +118,8 @@ class Node implements
 	// protected $criticalParts; //dari CriticalPartTrait
 	protected $firstSequence = false;
 	protected $locations; // new comer dari trait LocationTrait. (implementasi touch up)
+	protected $pet; // for packing 1 Model DT
+	protected $ldpe; // for packing 1 Model DT
 
 	function __construct($parameter, $debug = false)
 	{
@@ -169,6 +173,8 @@ class Node implements
 			if ($this->isRework() == false) {
 				$this->checkBoardDupplication();
 			}
+			// set ldpePet
+			// $this->setLdpePet();
 		}
 	}
 
@@ -1287,6 +1293,7 @@ class Node implements
 				}
 			}
 		}
+		
 		if (isset($this->parameter['ldpe'])) {
 			if (method_exists($this, 'storeAdditionalLabel')) {
 				if ($this->getStatus() == 'IN') {

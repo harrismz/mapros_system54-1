@@ -6,6 +6,8 @@ use Config;
 use App\Board;
 use App\Scanner;
 use App\Critical;
+use App\qrPanel;
+use App\AdditionalLabel;
 use Tymon\JWTAuth\JWTAuth;
 use App\Http\Controllers\Controller;
 use App\Api\V1\Requests\BoardRequest;

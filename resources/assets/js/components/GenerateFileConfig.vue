@@ -21,7 +21,7 @@
                 <!-- <input type="checkbox" id="isGenerateFile" v-model="config.isGenerateFile"> -->
                 <toggle-button id="isPwbId" v-model="config.isPwbId" :sync='true'  :color="'#2ab27b'" :labels="true"/>
                 
-                <label for="isPwbId"> Show PWB ID  </label>
+                <label for="isPwbId"> Show PWB ID Field</label>
             </div>
         </div>
 		<div class="form-group">
@@ -131,7 +131,8 @@
 		border: solid;
 		border-color: #ddd;
 		border-width: 2px;
-		padding: 3px;
-		margin: 2px;
+		padding:10px 10px 0 10px;
+		margin:0 0 10px 0;
+		border-radius: 10px;
 	}
 </style>

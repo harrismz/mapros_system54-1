@@ -1,7 +1,7 @@
 <template>
-	<div class="container">
+	<div class="container-fluid">
 		<div class="row">        
-			<div class="col-md-8 col-md-offset-2">
+			<div class="col-md-10 col-md-offset-1">
 				<div class="panel panel-default">
 					<div class="bg-info panel-heading custom-heading">
 						<i class="fa fa-cogs"></i> Config
@@ -33,10 +33,10 @@
                             </div>
 
                             <div class="form-group">
-                                <div class=" col-md-6 col-md-offset-3 col-xs-12">
+                                <div class=" col-md-9 col-md-offset-3 col-xs-12">
                                     <!-- <input type="checkbox" id="showSolder" v-model="config.showSolder"> -->
                                     <toggle-button id="showSolder" :sync='true' v-model="config.showSolder"  :color="'#2ab27b'" :labels="true"/>
-                                    <label for="showSolder"> show solder options </label>
+                                    <label for="showSolder"> Show SOLDER Options </label>
                                 </div>
                             </div>
 
@@ -48,64 +48,68 @@
                             </div>
 
                             <div class="form-group">
-                                <div class=" col-md-6 col-md-offset-3 col-xs-12">
+                                <div class=" col-md-9 col-md-offset-3 col-xs-12">
                                     <toggle-button id="showCritical" :sync='true' v-model="config.showCritical"  :color="'#2ab27b'" :labels="true"/>
-                                    <label for="showCritical"> show critical textfield </label>
+                                    <label for="showCritical"> Show CRITICAL Scan </label>
                                 </div>
                             </div>
 
                             <div class="form-group">
-                                <div class=" col-md-6 col-md-offset-3 col-xs-12">
+                                <div class=" col-md-9 col-md-offset-3 col-xs-12">
                                     <!-- <input type="checkbox" id="isGenerateFile" v-model="config.isGenerateFile"> -->
                                     <toggle-button id="isGenerateFile" v-model="config.isGenerateFile" :sync='true'  :color="'#2ab27b'" :labels="true"/>
                                     
-                                    <label for="isGenerateFile"> Generate file on scan </label>
+                                    <label for="isGenerateFile"> Generate FILE on Scan </label>
                                 </div>
                             </div>
 
                             <generate-file-config :config='config' />
 
                             <div class="form-group">
-                                <div class=" col-md-6 col-md-offset-3 col-xs-12">
+                                <div class=" col-md-9 col-md-offset-3 col-xs-12">
                                     <!-- <input type="checkbox" id="isSendAjax" v-model="config.isSendAjax"> -->
                                     <toggle-button id="isSendAjax" v-model="config.isSendAjax" :sync='true' :color="'#2ab27b'" :labels="true"/>
 
-                                    <label for="isSendAjax"> send data to avn test / avmt </label>
+                                    <label for="isSendAjax"> Send Data To AVN Test / AVMT </label>
                                 </div>
                             </div>
 
-                            <div class="form-group" v-if='config.isSendAjax'>
-                                <label for="uri" class="col-md-3 control-label">URI</label>
-                                <div class="col-md-9">
-                                    <input  type="text" v-model='config.uri' class="form-control" required autofocus>
+                            <div class="withBorder" v-if='config.isSendAjax'>
+                            
+                                <div class="form-group" >
+                                    <label for="uri" class="col-md-3 control-label">URI</label>
+                                    <div class="col-md-9">
+                                        <input  type="text" v-model='config.uri' class="form-control" required autofocus>
+                                    </div>
+                                </div>
+
+                                <div class="form-group" >
+                                    <label  class="col-md-3 control-label">DATA UNTUK DIKIRIM KE LUAR</label>	
+                                    <div class=" col-md-6  col-xs-9 col-sm-9">
+                                        <b-form-radio-group 
+                                            id="radios2" 
+                                            v-model="config.sendAjaxFileData" 
+                                            :options="radioOptions" 
+                                            name="radioSendAjaxFile"
+                                        >
+                                        </b-form-radio-group>
+                                    </div>
                                 </div>
                             </div>
 
-                            <div class="form-group" v-if='config.isSendAjax'>
-                                <label  class="col-md-3 control-label">DATA UNTUK DIKIRIM KE LUAR</label>	
-                                <div class=" col-md-6  col-xs-9 col-sm-9">
-                                    <b-form-radio-group 
-                                        id="radios2" 
-                                        v-model="config.sendAjaxFileData" 
-                                        :options="radioOptions" 
-                                        name="radioSendAjaxFile"
-                                    >
-                                    </b-form-radio-group>
-                                </div>
-                            </div>
 
                             <div class="form-group">
                                 <div class=" col-md-6 col-md-offset-3 col-xs-12">
                                     <!-- <input type="checkbox" v-model="config.isShowDeleteButton"> -->
                                     <toggle-button v-model="config.isShowDeleteButton" :sync='true' :color="'#2ab27b'" :labels="true"/>
-                                    <label for="isShowDeleteButton"> show delete button </label>
+                                    <label for="isShowDeleteButton"> Show DELETE Button </label>
                                 </div>
                             </div>
 
                             <div class="form-group">
                                 <div class=" col-md-6 col-md-offset-3 col-xs-12">
                                     <toggle-button v-model="config.showNgoption" :sync='true' :color="'#960a0a'" :labels="true"/>
-                                    <label for="showNgoption"> show NG button </label>
+                                    <label for="showNgoption"> Show NG Button </label>
                                 </div>
                             </div>
 
@@ -117,7 +121,7 @@
                             </div>
 
                             <div class="form-group">
-                                <div class=" col-md-6 col-md-offset-3 col-xs-12">
+                                <div class=" col-md-9 col-md-offset-3 col-xs-12">
                                     <toggle-button v-model="config.checkEsd" :sync='true' :color="'#2ab27b'" :labels="true"/>
                                     <label for="checkEsd"> Check ESD </label>
                                 </div>
@@ -131,7 +135,7 @@
                             </div>
 
                             <div class="form-group">
-                                <div class=" col-md-6 col-md-offset-3 col-xs-12">
+                                <div class=" col-md-9 col-md-offset-3 col-xs-12">
                                     <toggle-button v-model="config.isTouchUp" :sync='true' :color="'#2ab27b'" :labels="true"/>
                                     <label for="isTouchUp"> is Touch Up Process </label>
                                 </div>
@@ -142,37 +146,37 @@
                             </div>
 
                             <div class="form-group">
-                                <div class=" col-md-6 col-md-offset-3 col-xs-12">
+                                <div class=" col-md-9 col-md-offset-3 col-xs-12">
                                     <toggle-button v-model="config.isRework" :sync='true' :color="'#2ab27b'" :labels="true"/>
                                     <label for="isRework"> REWORK </label>
                                 </div>
                             </div>
 
                             <div class="form-group">
-                                <div class=" col-md-6 col-md-offset-3 col-xs-12">
-                                    <toggle-button v-model="config.isLdpePet" :sync='true' :color="'#2ab27b'" :labels="true"/>
-                                    <label for="isLdpePet"> Scan LDPE/PET Label ( for DT Model  ) </label>
-                                </div>
-                            </div>
-
-                            <div class="form-group">
-                                <div class=" col-md-6 col-md-offset-3 col-xs-12">
+                                <div class=" col-md-9 col-md-offset-3 col-xs-12">
                                     <toggle-button v-model="config.isManualInstruction" :sync='true' :color="'#2ab27b'" :labels="true"/>
                                     <label for="isManualInstruction"> Scan Manual Instruction </label>
                                 </div>
                             </div>
 
                             <div class="form-group">
-                                <div class=" col-md-6 col-md-offset-3 col-xs-12">
+                                <div class=" col-md-9 col-md-offset-3 col-xs-12">
                                     <toggle-button v-model="config.isScanCarton" :sync='true' :color="'#2ab27b'" :labels="true"/>
                                     <label for="isScanCarton"> Scan Inner Carton </label>
                                 </div>
                             </div>
 
                             <div class="form-group">
-                                <div class=" col-md-6 col-md-offset-3 col-xs-12">
+                                <div class=" col-md-9 col-md-offset-3 col-xs-12">
                                     <toggle-button v-model="config.fifoMode" :sync='true' :color="'#2ab27b'" :labels="true"/>
-                                    <label for="fifoMode"> Activate Fifo Mode </label>
+                                    <label for="fifoMode"> Activate FIFO Mode </label>
+                                </div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <div class=" col-md-9 col-md-offset-3 col-xs-12">
+                                    <toggle-button v-model="config.isLdpePet" :sync='true' :color="'#2ab27b'" :labels="true"/>
+                                    <label for="isLdpePet"> Show LDPE/PET Scan </label>
                                 </div>
                             </div>
 
